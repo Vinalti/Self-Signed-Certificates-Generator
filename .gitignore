@@ -1,0 +1,4 @@
+CA/
+*.{cert,crt,pem,key,csr}
+*/
+.config.txt
