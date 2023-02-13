@@ -1,7 +1,15 @@
-# Home-Certificate-Generator
+![License-Type](https://shields.io/github/license/vinalti/Home-Certificate-Generator) &nbsp;
+![Code-Size](https://shields.io/github/languages/code-size/vinalti/Home-Certificate-Generator) &nbsp;
+![Open-Issues](https://shields.io/github/issues-raw/vinalti/Home-Certificate-Generator) &nbsp;
+![Language](https://img.shields.io/badge/Language-Bash-blue) &nbsp;
+<!-- ![Downloads](https://shields.io/github/downloads/vinalti/Home-Certificate-Generator/total) -->
+# Trusted Self-Signed SSL Certificates Generator
 ## Description
-The script `generate_certificate.sh` will generate a private key (or use an existing one) 
-and allows you to generate **trusted certificates** for your home or company network.
+Easy to use, this script allows you to generate self-signed certificates that can be trusted 
+thanks to the CA. This is entirely offline, no certificate authority is required.
+
+The script `generate_certificate.sh` will generate a private key (or use an existing one) and
+allows you to generate **trusted self-signed certificates** for your home or company network.
 
 This script is a wrapper around the `openssl` command.
 It allows anyone to generate a RootCA, and issue certificates for home
@@ -12,8 +20,8 @@ which look valid but is reported invalid for some obscure reasons. This script a
 this process and provide you with valid certificates, perfect for any local server such as
 Home Assistant, Pi-Hole, Proxmox, Local GitLab, etc.
 
-Warning: You need to trust the Root CA on every client connecting. This is doable at home or
-in small company network. However the certificates will not work for an online service.
+> Warning: You need to trust the Root CA on every client connecting. This is doable at home or
+> in small company network. However the certificates will not work for an online service.
 
 ## Usage
 
