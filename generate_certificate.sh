@@ -2,7 +2,7 @@
 # Author :   https://github.com/Vinalti
 # Project :  https://github.com/Vinalti/Home-Certificate-Generator
 # Created :  2023-01-29
-# Last Edit: 2023-01-29
+# Last Edit: 2024-02-22
 #
 
 # GLOBAL VARIABLES
@@ -85,7 +85,7 @@ done
 
 # - Generate CA Private Key if it doesn't exists
 if [ ! -f "$private_key" ]; then
-    mkdir -p $(dirname "${private_key}")
+    mkdir -p "$(dirname "${private_key}")"
     echo ">> Private key '$private_key' not found : creating new private key..." 
     echo " > For security purpose insert secure password when requested." 
     openssl genrsa -aes256 -out "$private_key" 4096
@@ -128,7 +128,7 @@ while [[ 1 -eq 1 ]]; do
         if [[ "$force" == true ]]; then
             echo " > WARNING: directory '$dir' already exists and will be overwritten. Are you sure?"
             enter_to_continue
-            rm -f ${dir}/*
+            rm -r "${dir}"
         else
             echo " > ERROR: directory '$dir' already exists. Please choose another certificate id."
             continue
@@ -136,7 +136,7 @@ while [[ 1 -eq 1 ]]; do
     fi
 
     # - Create directory, initialize filenames
-    mkdir -p $dir
+    mkdir -p "$dir"
     key="${dir}/${id}.priv.key"
     csr="${dir}/.${id}_request.csr"
     pem="${dir}/${id}.pub.pem"
@@ -144,10 +144,10 @@ while [[ 1 -eq 1 ]]; do
     cnf="${dir}/.config.txt"
 
     # - Generate Private Key
-    openssl genrsa -out $key 4096
+    openssl genrsa -out "$key" 4096
     if [[ $? -ne 0 ]]; then  echo "[E201] An error occured while generating certificate $id."; continue; fi
     # - Generate Certificate Request
-    openssl req -new -sha256 -subj "/CN=$id" -key $key -out $csr
+    openssl req -new -sha256 -subj "/CN=$id" -key "$key" -out "$csr"
     if [[ $? -ne 0 ]]; then  echo "[E202] An error occured while generating certificate $id."; continue; fi
     # - Prompting for Certificate Alternative Name
     default_alt="DNS:${id}"
@@ -172,9 +172,9 @@ while [[ 1 -eq 1 ]]; do
         alt_names="subjectAltName=${default_alt}"        
     fi
 
-    echo "$alt_names" >> $cnf
+    echo "$alt_names" >> "$cnf"
     echo " > The following alt names has been saved:"
-    echo "  -> " $(cat $cnf)
+    echo "  -> " $(cat "$cnf")
     echo "  If you made an error, edit file '$cnf' before to continue"
 
     enter_to_continue
@@ -183,8 +183,8 @@ while [[ 1 -eq 1 ]]; do
     openssl x509 -req -sha256 -days "$duration" -in "$csr" -CA "$CA" -CAkey "$private_key" -out "$pem" -extfile "$cnf" -CAcreateserial
     if [[ $? -ne 0 ]]; then  echo "[E203] An error occured while generating certificate $id."; continue; fi
     # - Generating Certificate Chain (incl. root CA public key)
-    cat $pem > $chain
-    cat $CA >> $chain
+    cat "$pem" > "$chain"
+    cat "$CA" >> "$chain"
     if [[ $? -ne 0 ]]; then  echo "[E204] An error occured while generating certificate $id."; continue; fi
     # - Inform user of success
     echo "Certificate $id has been issued."
